@@ -1,0 +1,379 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --text-color: #fff;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
+  --current-weight: 600;
+  --letter-spacing: -0.02em;
+  --line-height: 1.3;
+  --next-opacity: 0.45;
+  --bg: #111;
+  --shadow-current: 0 1px 4px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6), 0 0 28px rgba(0,0,0,0.3);
+  --shadow-next: 0 1px 3px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.5);
+  --current-size: clamp(16px, 3.5vw, 28px);
+  --next-size: clamp(12px, 2.5vw, 20px);
+}
+
+/* --- Font size presets --- */
+body[data-font-size="small"] {
+  --current-size: clamp(14px, 2.8vw, 22px);
+  --next-size: clamp(10px, 2vw, 16px);
+}
+body[data-font-size="large"] {
+  --current-size: clamp(20px, 4.5vw, 36px);
+  --next-size: clamp(14px, 3.2vw, 26px);
+}
+body[data-font-size="xlarge"] {
+  --current-size: clamp(24px, 5.5vw, 44px);
+  --next-size: clamp(16px, 4vw, 32px);
+}
+
+/* --- Wes Anderson theme --- */
+body[data-theme="wes-anderson"] {
+  --text-color: #E8C547;
+  --font: 'Jost', 'Futura', sans-serif;
+  --current-weight: 700;
+  --letter-spacing: 0.05em;
+  --line-height: 1.5;
+  --bg: #1c1410;
+  --shadow-current: 0 1px 3px rgba(0,0,0,0.7), 0 0 8px rgba(0,0,0,0.3);
+  --shadow-next: 0 1px 2px rgba(0,0,0,0.6), 0 0 5px rgba(0,0,0,0.2);
+}
+
+/* --- 8-bit RPG theme --- */
+body[data-theme="8bit"] {
+  --text-color: #fff;
+  --font: 'Press Start 2P', monospace;
+  --current-weight: 400;
+  --letter-spacing: 0;
+  --line-height: 1.8;
+  --next-opacity: 0.4;
+  --bg: #000832;
+  --shadow-current: 2px 2px 0 rgba(0,0,0,0.9);
+  --shadow-next: 1px 1px 0 rgba(0,0,0,0.9);
+  --current-size: clamp(10px, 2vw, 16px);
+  --next-size: clamp(8px, 1.5vw, 12px);
+}
+
+body[data-theme="8bit"][data-font-size="small"] {
+  --current-size: clamp(8px, 1.6vw, 12px);
+  --next-size: clamp(6px, 1.2vw, 10px);
+}
+body[data-theme="8bit"][data-font-size="large"] {
+  --current-size: clamp(12px, 2.5vw, 20px);
+  --next-size: clamp(10px, 2vw, 16px);
+}
+body[data-theme="8bit"][data-font-size="xlarge"] {
+  --current-size: clamp(14px, 3vw, 24px);
+  --next-size: clamp(12px, 2.5vw, 20px);
+}
+
+/* --- Base layout --- */
+body {
+  background: var(--bg);
+  color: var(--text-color);
+  font-family: var(--font);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background 0.3s ease;
+}
+
+/* --- Lyrics view --- */
+#lyrics-view {
+  display: none;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+#lyrics-view.active { display: flex; }
+
+#container {
+  text-align: center;
+  padding: 20px 40px;
+  width: 100%;
+}
+
+#current {
+  font-size: var(--current-size);
+  font-weight: var(--current-weight);
+  letter-spacing: var(--letter-spacing);
+  line-height: var(--line-height);
+  min-height: 1.3em;
+  text-shadow: var(--shadow-current);
+  transition: opacity 0.15s ease;
+}
+
+#next {
+  font-size: var(--next-size);
+  font-weight: 400;
+  opacity: var(--next-opacity);
+  margin-top: 8px;
+  min-height: 1.3em;
+  line-height: var(--line-height);
+  text-shadow: var(--shadow-next);
+}
+
+.no-lyrics {
+  opacity: 0.25;
+  font-style: italic;
+  font-weight: 400;
+}
+
+body[data-theme="8bit"] .no-lyrics { font-style: normal; }
+
+#track {
+  position: fixed;
+  bottom: 8px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 11px;
+  font-family: -apple-system, system-ui, sans-serif;
+  opacity: 0.3;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+}
+
+/* --- Controls --- */
+#controls {
+  position: fixed;
+  top: 8px;
+  right: 10px;
+  z-index: 10;
+}
+
+.ctrl-btn {
+  opacity: 0.3;
+  transition: opacity 0.2s ease;
+  cursor: pointer;
+  color: var(--text-color);
+  background: none;
+  border: none;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.ctrl-btn:hover { opacity: 0.9; }
+.ctrl-btn svg { width: 14px; height: 14px; }
+
+/* --- Login screen --- */
+#login-screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  gap: 24px;
+}
+
+#login-screen.active { display: flex; }
+
+#login-screen h1 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-family: -apple-system, system-ui, sans-serif;
+}
+
+#login-btn {
+  background: #1DB954;
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  padding: 12px 32px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: -apple-system, system-ui, sans-serif;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+#login-btn:hover { opacity: 0.9; }
+#login-btn:active { transform: scale(0.97); }
+#login-btn:disabled { opacity: 0.5; cursor: default; }
+
+#login-error {
+  font-size: 12px;
+  font-family: -apple-system, system-ui, sans-serif;
+  color: #ff6b6b;
+  display: none;
+}
+
+/* --- Settings panel --- */
+#settings-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 340px;
+  background: rgba(30, 30, 32, 0.97);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  transform: translateX(100%);
+  transition: transform 0.25s ease;
+  z-index: 20;
+  overflow-y: auto;
+  font-family: -apple-system, system-ui, sans-serif;
+  color: #fff;
+}
+
+body.settings-open #settings-panel { transform: translateX(0); }
+
+#settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+#settings-header span {
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+#settings-close {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: opacity 0.15s;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+#settings-close:hover { opacity: 1; }
+
+.section { padding: 20px 16px; }
+.section + .section { border-top: 1px solid rgba(255, 255, 255, 0.06); }
+
+.label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.4;
+  margin-bottom: 12px;
+}
+
+#themes { display: flex; gap: 10px; }
+
+.theme-card {
+  flex: 1;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 12px 8px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.theme-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.theme-card.active {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.theme-preview {
+  width: 100%;
+  height: 48px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.default-preview {
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+  font-family: -apple-system, system-ui, sans-serif;
+}
+
+.wa-preview {
+  background: rgba(45, 30, 15, 0.5);
+  color: #E8C547;
+  font-family: 'Jost', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.bit-preview {
+  background: rgba(0, 0, 40, 0.8);
+  color: #fff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  border: 2px double rgba(255, 255, 255, 0.6);
+  border-radius: 2px;
+}
+
+.theme-card span {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+#sizes { display: flex; gap: 8px; }
+
+#sizes button {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 0;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  font-family: inherit;
+}
+
+#sizes button:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+#sizes button.active {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+#disconnect-btn {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #ff6b6b;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 0;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-family: inherit;
+}
+
+#disconnect-btn:hover {
+  background: rgba(255, 100, 100, 0.1);
+}

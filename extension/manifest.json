@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Playa – Spotify Lyrics",
+  "version": "1.0.0",
+  "description": "Synced Spotify lyrics in a popup window",
+  "permissions": ["identity", "storage"],
+  "host_permissions": [
+    "https://api.spotify.com/*",
+    "https://accounts.spotify.com/*",
+    "https://lrclib.net/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    },
+    "default_title": "Playa – Spotify Lyrics"
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  }
+}

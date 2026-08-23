@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Playa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="popup.css">
+</head>
+<body data-theme="default" data-font-size="medium">
+
+<!-- Login screen -->
+<div id="login-screen" class="active">
+  <h1>Playa</h1>
+  <button id="login-btn">Connect to Spotify</button>
+  <div id="login-error"></div>
+</div>
+
+<!-- Lyrics view -->
+<div id="lyrics-view">
+  <div id="controls">
+    <button id="gear" class="ctrl-btn" title="Settings">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+    </button>
+  </div>
+  <div id="container">
+    <div id="current"></div>
+    <div id="next"></div>
+  </div>
+  <div id="track"></div>
+</div>
+
+<!-- Settings panel (slides in from right) -->
+<div id="settings-panel">
+  <div id="settings-header">
+    <span>Settings</span>
+    <button id="settings-close">&times;</button>
+  </div>
+
+  <div class="section">
+    <div class="label">Theme</div>
+    <div id="themes">
+      <div class="theme-card" data-theme="default">
+        <div class="theme-preview default-preview">Aa</div>
+        <span>Default</span>
+      </div>
+      <div class="theme-card" data-theme="wes-anderson">
+        <div class="theme-preview wa-preview">Aa</div>
+        <span>Anderson</span>
+      </div>
+      <div class="theme-card" data-theme="8bit">
+        <div class="theme-preview bit-preview">Aa</div>
+        <span>8-bit</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="label">Font Size</div>
+    <div id="sizes">
+      <button data-size="small">S</button>
+      <button data-size="medium">M</button>
+      <button data-size="large">L</button>
+      <button data-size="xlarge">XL</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <button id="disconnect-btn">Disconnect Spotify</button>
+  </div>
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>

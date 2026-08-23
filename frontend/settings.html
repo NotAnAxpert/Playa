@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: transparent;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
+    color: #fff;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  #panel {
+    background: rgba(30, 30, 32, 0.92);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  #titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    cursor: grab;
+  }
+
+  #titlebar:active { cursor: grabbing; }
+
+  #titlebar span {
+    font-size: 13px;
+    font-weight: 600;
+    opacity: 0.9;
+  }
+
+  #close {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    opacity: 0.4;
+    transition: opacity 0.15s;
+    padding: 0 4px;
+    line-height: 1;
+  }
+
+  #close:hover { opacity: 1; }
+
+  .section { padding: 20px 16px; }
+  .section + .section { border-top: 1px solid rgba(255, 255, 255, 0.06); }
+
+  .label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.4;
+    margin-bottom: 12px;
+  }
+
+  #themes { display: flex; gap: 10px; }
+
+  .theme-card {
+    flex: 1;
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 12px 8px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .theme-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .theme-card.active {
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .theme-preview {
+    width: 100%;
+    height: 48px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .default-preview {
+    background: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+    font-family: -apple-system, system-ui, sans-serif;
+  }
+
+  .wa-preview {
+    background: rgba(45, 30, 15, 0.5);
+    color: #E8C547;
+    font-family: 'Jost', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  .bit-preview {
+    background: rgba(0, 0, 40, 0.8);
+    color: #fff;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    border: 2px double rgba(255, 255, 255, 0.6);
+    border-radius: 2px;
+  }
+
+  .theme-card span {
+    font-size: 11px;
+    opacity: 0.7;
+  }
+
+  #sizes { display: flex; gap: 8px; }
+
+  #sizes button {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.06);
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 0;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    font-family: inherit;
+  }
+
+  #sizes button:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  #sizes button.active {
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.12);
+  }
+</style>
+</head>
+<body>
+<div id="panel">
+  <div id="titlebar">
+    <span>Settings</span>
+    <button id="close">&times;</button>
+  </div>
+
+  <div class="section">
+    <div class="label">Theme</div>
+    <div id="themes">
+      <div class="theme-card" data-theme="default">
+        <div class="theme-preview default-preview">Aa</div>
+        <span>Default</span>
+      </div>
+      <div class="theme-card" data-theme="wes-anderson">
+        <div class="theme-preview wa-preview">Aa</div>
+        <span>Anderson</span>
+      </div>
+      <div class="theme-card" data-theme="8bit">
+        <div class="theme-preview bit-preview">Aa</div>
+        <span>8-bit</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="label">Font Size</div>
+    <div id="sizes">
+      <button data-size="small">S</button>
+      <button data-size="medium">M</button>
+      <button data-size="large">L</button>
+      <button data-size="xlarge">XL</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const { invoke } = window.__TAURI__.core;
+  const { listen } = window.__TAURI__.event;
+
+  document.getElementById('titlebar').addEventListener('mousedown', (e) => {
+    if (e.target.id !== 'close') invoke('start_drag');
+  });
+
+  document.getElementById('close').addEventListener('click', () => {
+    invoke('close_window');
+  });
+
+  document.querySelectorAll('.theme-card').forEach(card => {
+    card.addEventListener('click', () => {
+      invoke('update_setting', { key: 'theme', value: card.dataset.theme });
+    });
+  });
+
+  document.querySelectorAll('#sizes button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      invoke('update_setting', { key: 'font_size', value: btn.dataset.size });
+    });
+  });
+
+  function applySettings(s) {
+    document.querySelectorAll('.theme-card').forEach(c => {
+      c.classList.toggle('active', c.dataset.theme === s.theme);
+    });
+    document.querySelectorAll('#sizes button').forEach(b => {
+      b.classList.toggle('active', b.dataset.size === s.font_size);
+    });
+  }
+
+  listen('settings-changed', (e) => applySettings(e.payload));
+  invoke('get_settings').then(applySettings);
+</script>
+</body>
+</html>

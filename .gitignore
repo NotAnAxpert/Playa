@@ -1,0 +1,8 @@
+# Rust build artifacts
+src-tauri/target/
+
+# macOS
+.DS_Store
+
+# Playa local data
+.playa/

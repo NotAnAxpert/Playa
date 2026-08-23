@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Playa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --text-color: #fff;
+    --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
+    --current-weight: 600;
+    --letter-spacing: -0.02em;
+    --line-height: 1.3;
+    --next-opacity: 0.45;
+    --bg: transparent;
+    --bg-interactive: rgba(0, 0, 0, 0.06);
+    --interactive-outline: 1px solid rgba(255, 255, 255, 0.12);
+    --interactive-radius: 8px;
+    --shadow-current: 0 1px 4px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6), 0 0 28px rgba(0,0,0,0.3);
+    --shadow-next: 0 1px 3px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.5);
+    --current-size: clamp(16px, 3.5vw, 28px);
+    --next-size: clamp(12px, 2.5vw, 20px);
+    --theme-border: none;
+    --theme-box-shadow: none;
+  }
+
+  /* --- Font size presets --- */
+  body[data-font-size="small"] {
+    --current-size: clamp(14px, 2.8vw, 22px);
+    --next-size: clamp(10px, 2vw, 16px);
+  }
+  body[data-font-size="large"] {
+    --current-size: clamp(20px, 4.5vw, 36px);
+    --next-size: clamp(14px, 3.2vw, 26px);
+  }
+  body[data-font-size="xlarge"] {
+    --current-size: clamp(24px, 5.5vw, 44px);
+    --next-size: clamp(16px, 4vw, 32px);
+  }
+
+  /* --- Wes Anderson theme --- */
+  body[data-theme="wes-anderson"] {
+    --text-color: #E8C547;
+    --font: 'Jost', 'Futura', sans-serif;
+    --current-weight: 700;
+    --letter-spacing: 0.05em;
+    --line-height: 1.5;
+    --bg: transparent;
+    --bg-interactive: rgba(0, 0, 0, 0.06);
+    --interactive-outline: 1px solid rgba(232, 197, 71, 0.15);
+    --interactive-radius: 4px;
+    --shadow-current: 0 1px 3px rgba(0,0,0,0.7), 0 0 8px rgba(0,0,0,0.3);
+    --shadow-next: 0 1px 2px rgba(0,0,0,0.6), 0 0 5px rgba(0,0,0,0.2);
+  }
+
+  /* --- 8-bit RPG theme --- */
+  body[data-theme="8bit"] {
+    --text-color: #fff;
+    --font: 'Press Start 2P', monospace;
+    --current-weight: 400;
+    --letter-spacing: 0;
+    --line-height: 1.8;
+    --next-opacity: 0.4;
+    --bg: rgba(0, 8, 50, 0.92);
+    --bg-interactive: rgba(0, 8, 50, 0.92);
+    --interactive-outline: none;
+    --interactive-radius: 0;
+    --shadow-current: 2px 2px 0 rgba(0,0,0,0.9);
+    --shadow-next: 1px 1px 0 rgba(0,0,0,0.9);
+    --current-size: clamp(10px, 2vw, 16px);
+    --next-size: clamp(8px, 1.5vw, 12px);
+    --theme-border: 3px solid rgba(200, 200, 220, 0.85);
+    --theme-box-shadow: inset 0 0 0 3px rgba(0, 8, 50, 0.92), inset 0 0 0 5px rgba(200, 200, 220, 0.45);
+  }
+
+  /* 8-bit font size overrides (pixel font needs smaller sizes) */
+  body[data-theme="8bit"][data-font-size="small"] {
+    --current-size: clamp(8px, 1.6vw, 12px);
+    --next-size: clamp(6px, 1.2vw, 10px);
+  }
+  body[data-theme="8bit"][data-font-size="large"] {
+    --current-size: clamp(12px, 2.5vw, 20px);
+    --next-size: clamp(10px, 2vw, 16px);
+  }
+  body[data-theme="8bit"][data-font-size="xlarge"] {
+    --current-size: clamp(14px, 3vw, 24px);
+    --next-size: clamp(12px, 2.5vw, 20px);
+  }
+
+  /* --- Base layout --- */
+  body {
+    background: var(--bg);
+    color: var(--text-color);
+    font-family: var(--font);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    border: var(--theme-border);
+    box-shadow: var(--theme-box-shadow);
+    transition: background 0.15s ease;
+  }
+
+  #container {
+    text-align: center;
+    padding: 20px 40px;
+    width: 100%;
+  }
+
+  #current {
+    font-size: var(--current-size);
+    font-weight: var(--current-weight);
+    letter-spacing: var(--letter-spacing);
+    line-height: var(--line-height);
+    min-height: 1.3em;
+    text-shadow: var(--shadow-current);
+    transition: opacity 0.15s ease;
+  }
+
+  #next {
+    font-size: var(--next-size);
+    font-weight: 400;
+    opacity: var(--next-opacity);
+    margin-top: 8px;
+    min-height: 1.3em;
+    line-height: var(--line-height);
+    text-shadow: var(--shadow-next);
+  }
+
+  .no-lyrics {
+    opacity: 0.25;
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  body[data-theme="8bit"] .no-lyrics { font-style: normal; }
+
+  /* Track info and hint use system font in all themes */
+  #track {
+    position: fixed;
+    bottom: 8px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 11px;
+    font-family: -apple-system, system-ui, sans-serif;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+    pointer-events: none;
+  }
+
+  #hint {
+    position: fixed;
+    top: 6px;
+    right: 8px;
+    font-size: 10px;
+    font-family: -apple-system, system-ui, sans-serif;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    pointer-events: none;
+  }
+
+  #shortcut-hint {
+    position: fixed;
+    bottom: 6px;
+    right: 8px;
+    font-size: 10px;
+    font-family: -apple-system, system-ui, sans-serif;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    pointer-events: none;
+  }
+
+  /* --- Controls (lock + gear) --- */
+  #controls {
+    position: fixed;
+    top: 6px;
+    left: 8px;
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+  }
+
+  .ctrl-btn {
+    opacity: 0.15;
+    transition: opacity 0.2s ease;
+    cursor: pointer;
+    color: var(--text-color);
+    background: none;
+    border: none;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+  }
+
+  .ctrl-btn:hover { opacity: 0.9; }
+  .ctrl-btn svg { width: 14px; height: 14px; }
+
+  /* --- Interactive (hover) state --- */
+  body.interactive {
+    background: var(--bg-interactive);
+    outline: var(--interactive-outline);
+    outline-offset: -1px;
+    border-radius: var(--interactive-radius);
+    cursor: grab;
+  }
+
+  body.interactive:active { cursor: grabbing; }
+  body.interactive #track { opacity: 0.3; }
+  body.interactive #hint { opacity: 0.25; }
+  body.interactive .ctrl-btn { opacity: 0.5; }
+  body.interactive .ctrl-btn:hover { opacity: 1; }
+
+  body.nearby #shortcut-hint,
+  body.interactive #shortcut-hint { opacity: 0.3; }
+
+  /* --- Nearby state (cursor approaching overlay) --- */
+  body.nearby #lock { opacity: 0.3; }
+
+  /* --- Locked state --- */
+  body.locked #gear { display: none; }
+  body.locked #hint { display: none; }
+
+  body.locked.interactive {
+    background: var(--bg);
+    outline: none;
+    cursor: default;
+  }
+
+  body.locked.interactive:active { cursor: default; }
+  body.locked.interactive #track { opacity: 0; }
+</style>
+</head>
+<body>
+
+<div id="controls">
+  <button id="lock" class="ctrl-btn" title="Lock overlay">
+    <svg id="icon-unlocked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+      <path d="M7 11V7a5 5 0 0 1 9.9-1"/>
+    </svg>
+    <svg id="icon-locked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+    </svg>
+  </button>
+  <button id="gear" class="ctrl-btn" title="Settings">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </svg>
+  </button>
+</div>
+
+<div id="container">
+  <div id="current"></div>
+  <div id="next"></div>
+</div>
+<div id="track"></div>
+<div id="hint">drag to move</div>
+<div id="shortcut-hint">⌘⇧L to lock</div>
+
+<script>
+  const current = document.getElementById('current');
+  const next = document.getElementById('next');
+  const track = document.getElementById('track');
+  const iconUnlocked = document.getElementById('icon-unlocked');
+  const iconLocked = document.getElementById('icon-locked');
+  const shortcutHint = document.getElementById('shortcut-hint');
+
+  const { invoke } = window.__TAURI__.core;
+  const { listen } = window.__TAURI__.event;
+
+  let isLocked = false;
+
+  document.body.addEventListener('mousedown', (e) => {
+    if (!isLocked && !e.target.closest('#controls')) {
+      invoke('start_drag');
+    }
+  });
+
+  document.body.addEventListener('mouseleave', () => {
+    invoke('deactivate');
+  });
+
+  document.getElementById('lock').addEventListener('click', (e) => {
+    e.stopPropagation();
+    invoke('toggle_lock');
+  });
+
+  document.getElementById('gear').addEventListener('click', (e) => {
+    e.stopPropagation();
+    invoke('open_settings');
+  });
+
+  function applySettings(s) {
+    isLocked = s.locked;
+    document.body.dataset.theme = s.theme;
+    document.body.dataset.fontSize = s.font_size;
+    document.body.classList.toggle('locked', s.locked);
+    iconUnlocked.style.display = s.locked ? 'none' : '';
+    iconLocked.style.display = s.locked ? '' : 'none';
+    shortcutHint.textContent = s.locked ? '⌘⇧L to unlock' : '⌘⇧L to lock';
+  }
+
+  listen('playa', (e) => {
+    const msg = e.payload;
+    switch (msg.type) {
+      case 'track':
+        track.textContent = msg.artist + ' — ' + msg.title;
+        break;
+      case 'line':
+        current.textContent = msg.current.text;
+        current.className = '';
+        next.textContent = msg.next ? msg.next.text : '';
+        break;
+      case 'no_lyrics':
+        current.textContent = 'No lyrics available';
+        current.className = 'no-lyrics';
+        next.textContent = '';
+        break;
+    }
+  });
+
+  listen('proximity', (e) => {
+    document.body.classList.toggle('nearby', e.payload);
+  });
+
+  listen('interactive', (e) => {
+    document.body.classList.toggle('interactive', e.payload);
+  });
+
+  listen('settings-changed', (e) => {
+    applySettings(e.payload);
+  });
+
+  invoke('get_settings').then(applySettings);
+</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "productName": "Playa",
+  "version": "0.1.0",
+  "identifier": "com.playa.lyrics",
+  "build": {
+    "frontendDist": "../frontend"
+  },
+  "app": {
+    "macOSPrivateApi": true,
+    "withGlobalTauri": true,
+    "security": {
+      "csp": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com"
+    },
+    "windows": [
+      {
+        "label": "main",
+        "title": "Playa",
+        "width": 800,
+        "height": 150,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": true,
+        "resizable": true,
+        "shadow": false,
+        "center": true
+      }
+    ]
+  }
+}

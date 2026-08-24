@@ -5,6 +5,13 @@
   "build": {
     "frontendDist": "../frontend"
   },
+  "bundle": {
+    "active": true,
+    "targets": ["dmg"],
+    "macOS": {
+      "minimumSystemVersion": "10.15"
+    }
+  },
   "app": {
     "macOSPrivateApi": true,
     "withGlobalTauri": true,

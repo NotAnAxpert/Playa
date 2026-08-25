@@ -441,11 +441,23 @@ async fn hover_poll(app: AppHandle, state: Arc<Interaction>) {
             let _ = app.emit("proximity", near);
         }
 
+        let is_locked = state.locked.load(Ordering::Relaxed);
+
         if state.active.load(Ordering::Relaxed) {
+            let should_deactivate = if is_locked {
+                let icon_size = 44.0;
+                !(cx >= win_x && cx <= win_x + icon_size && cy >= win_y && cy <= win_y + icon_size)
+            } else {
+                !(cx >= win_x && cx <= win_x + win_w && cy >= win_y && cy <= win_y + win_h)
+            };
+            if should_deactivate {
+                state.active.store(false, Ordering::Relaxed);
+                let _ = window.set_ignore_cursor_events(true);
+                let _ = app.emit("interactive", false);
+            }
             continue;
         }
 
-        let is_locked = state.locked.load(Ordering::Relaxed);
         let in_bounds = if is_locked {
             let icon_size = 44.0;
             cx >= win_x && cx <= win_x + icon_size && cy >= win_y && cy <= win_y + icon_size
